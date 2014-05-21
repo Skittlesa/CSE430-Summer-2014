@@ -1,0 +1,32 @@
+\documentclass[12pt]{article}
+\usepackage{geometry}                % See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   % ... or a4paper or a5paper or ... 
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{amssymb}
+\usepackage{epstopdf}
+\DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
+
+\title{CSE 430 Summer 2014 - Homework 1}
+\author{Ryan Dougherty}
+\date{}                                           % Activate to display a given date or no date
+
+\begin{document}
+\maketitle
+
+\section*{Question 1.13} {\color{blue}The issue of resource utilization shows up in different forms in different types of operating systems. List what resources must be managed carefully in the following settings: (a) Mainframe or minicomputer systems, (b) Workstations connected to servers, (c) Mobile computers}
+(a) (b) (c)
+
+\section*{Question 1.22} {\color{blue}Many SMP systems have different levels of caches; one level is local to each processing core, and another level is shared among all processing cores. Why are caching systems designed this way?}
+
+\section*{Question 1.23} {\color{blue}Consider an SMP system similar to the one shown in Figure 1.6. Illustrate with an example how data residing in memory could in fact have a different value in each of the local caches.}
+
+\section*{Question 1.25} {\color{blue}Describe a mechanism for enforcing memory protection in order to prevent a program from modifying the memory associated with other programs.}
+
+\section*{Question 2.5} {\color{blue}What is the purpose of the command interpreter? Why is it usually separate from the kernel?}
+
+\section*{Question 2.17} {\color{blue}Would it be possible for the user to develop a new command interpreter using the system-call interface provided by the operating system?}
+
+\section*{Question 2.18} {\color{blue}What are the two models of interprocess communication? What are the strengths and weaknesses of the two approaches?}
+
+\end{document}  
