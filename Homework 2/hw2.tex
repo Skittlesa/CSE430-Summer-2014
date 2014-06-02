@@ -1,0 +1,89 @@
+\documentclass[12pt]{article}
+\usepackage{geometry}                % See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   % ... or a4paper or a5paper or ... 
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{amssymb}
+\usepackage{epstopdf}
+\DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
+
+\title{CSE 430 Summer 2014 - Homework 2}
+\author{Ryan Dougherty}
+\date{}                                           % Activate to display a given date or no date
+
+\begin{document}
+\maketitle
+
+\section*{Question 3.9} {\color{blue}Describe the actions taken by a kernel to context-switch between processes.}
+The OS must save the current process's state (the one that is running) and restore the next-to-be-run process's state. What needs to be saved are all of the registers, the processor id, etc. There are also possible architecture-specific operations that need to be done as well.
+
+\section*{Question 3.17} {\color{blue}Using the program shown in Figure 3.35, explain what the output will be at lines X and Y.} For LINE X, the output will be: ``CHILD: 0 CHILD: -1 CHILD: -4 CHILD: -9 CHILD: -16 ". For LINE Y, the output will be: ``PARENT: 0 PARENT: 1 PARENT: 2 PARENT: 3 PARENT: 4".
+
+\section*{Question 3.18} {\color{blue}What are the benefits and the disadvantages of each of the following? Consider both the system level and the programmer level.
+\begin{enumerate}
+\item[(a)]Synchronous and asynchronous communication: {\color{black}
+\begin{itemize}
+\item Benefit (synchronous): it allows a rendezvous (when send() and receive() are both blocking) between the sender and receiver. 
+\item Disadvantage (synchronous): a rendezvous may not be required given the context of the system, and the message could have be delievered asynchronously. Therefore, send() and receive() do not have to both block if necessary in some situations.
+\item Benefit (asynchronous): some scenarios may require asynchronous communication, particularly when there are many users sending messages on the same machine. Also, asynchronous communication can send multiple large messages faster than synchronous (because synchronous blocks until the message send is complete).
+\item Disadvantage (asynchronous): there is overhead in sending a message asynchronously (in starting a different thread to send the message on, etc.).
+\end{itemize}
+}
+
+\item[(b)]Automatic and explicit buffering: {\color{black}
+\begin{itemize}
+\item Benefit (automatic): it provides a queue with an undetermined length. Therefore, the sender does not ever block while it waits to copy some message. 
+\item Disadvantage (automatic): there is no way to figure out how the buffer will be exactly implemented, which may lead to large memory allocation and much of the buffer ends up not being used. 
+\item Benefit (explicit): less likely that memory will be wasted (see automatic's disadvantage above).
+\item Disadvantage (explicit): since the size of the buffer is known and non-changing, the sender may be blocked while it waits for free space in the buffer.
+\end{itemize}
+}
+
+\item[(c)]Send by copy and send by reference: {\color{black}
+\begin{itemize}
+\item Benefit (by reference): there is no extra memory allocation needed to copy the object (unlike by-copy).
+\item Disadvantage (by reference): it does not allow the receiver to change the input parameter's state.
+\item Benefit (by copy): it allows the receiver to change the parameter's state (unlike by-reference's disadvantage above).
+\item Disadvantage (by copy): it requires extra memory allocation and CPU time to copy the contents of the input parameter.
+\end{itemize}
+}
+
+\item[(d)]Fixed-sized and variable-sized messages: {\color{black}
+\begin{itemize}
+\item Benefit (fixed-size): a buffer can hold a known number of messages, since both the message and buffer sizes are fixed.
+\item Disadvantage (fixed-size): only messages of some fixed size can be sent through a buffer.
+\item Benefit (variable-size): messages of any size can be sent through a buffer (unlike fixed-size's disadvantage above).
+\item Disadvantage (variable-size): the \# of variable-sized messages that can be held by a buffer is unknown, since the size of the message can be anything.
+\end{itemize}
+}
+
+
+\end{enumerate}
+}
+
+\section*{Question 4.8} {\color{blue}Which of the following components of program state are shared across threads in a multithreaded process?
+\begin{enumerate}
+\item[(a)]Register values: {\color{black}Not shared}
+\item[(b)]Heap memory: {\color{black}Shared}
+\item[(c)]Global variables: {\color{black}Shared}
+\item[(d)]Stack memory: {\color{black}Not shared}
+\end{enumerate}
+}
+
+\section*{Question 4.17} {\color{blue}The program shown in Figure 4.16 uses the Pthreads API. What would be the output from the program at LINE C and LINE P?} At LINE C, the output is 5, and at LINE P, the output is 0.
+
+\section*{Question 4.18} {\color{blue}Consider a multicore system and a mulithreaded program written using the many-to-many threading model. Let the number of user-level threads in the program be greater than the number of processing cores in the system. Dicuss the performance implications of the following scenarios.
+\begin{enumerate}
+\item[(a)]The number of kernel threads allocated to the program is less than the number of processing cores. {\color{black}
+In this scenario, some of the processors would remain idle. Only kernel threads are mapped to processors, not user-level threads. Therefore, since the number of kernel threads is less than the number of processing cores, there are some leftover processors, which are idle.}
+
+\item[(b)]The number of kernel threads allocated to the program is equal to the number of processing cores. {\color{black}
+In this scenario, it is possible that all of the processors might be utilized at the same time. If a kernel thread blocks for some reason, the processor that is mapped to by that kernel thread will be idle.
+}
+
+\item[(c)]The number of kernel threads allocated to the program is greater than the number of processing cores but less than the number of user-level threads. {\color{black}
+In this scenario, a kernel thread that is blocked (meaning that its corresponding processor is idle) can be swapped out with another that is in the ready state, which will increase usage of the system.}
+\end{enumerate}
+}
+
+\end{document}  
