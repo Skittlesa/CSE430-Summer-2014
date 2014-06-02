@@ -1,0 +1,52 @@
+\documentclass[12pt]{article}
+\usepackage{geometry}                % See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   % ... or a4paper or a5paper or ... 
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{amssymb}
+\usepackage{epstopdf}
+\DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
+
+\title{CSE 430 Summer 2014 - Project 1}
+\author{Ryan Dougherty}
+\date{}                                           % Activate to display a given date or no date
+
+\begin{document}
+\maketitle
+
+\abstract{This document will be about the program output and explanation of what each program does. Each program is a section, and the filename is the section name.}
+
+\section{newproc-posix.c}
+The purpose of the program: to fork a process and create a child, then print the output. If the process is the child (with pid == 0), then it will print the files in the current directory (with the execlp("/bin/ls","ls",NULL); command). The program output is the following:
+{\color{blue}
+\newline I am the child 0
+\newline I am the parent 24920
+\newline newproc-posix.c  posix
+\newline Child Complete
+}
+
+\section{shm-posix-\{consumer, producer\}.c}
+The purpose of these programs: to create a consumer-producer relationship in C where the producer produces items, and the consumer consumes them once they are available. They accomplish this by creating a shared-memory space from which the producer can insert items and the consumer can read from them. The program output is the following:
+{\color{blue}
+\newline Studying Operating Systems Is Fun!
+}
+
+\section{Date\{Server, Client\}.java}
+The purpose of these programs: to create a server-client relationship in Java to provide a service to a client. The functionality is to give the current date and time. The program output is the following:
+{\color{blue}
+\newline Thu May 29 10:11:16 MST 2014
+}
+
+\section{unix\_pipe.c}
+The purpose of the program: to create a pipe and fork a child process in C. The program constructs a pipe to be shared between the child and parent process. If we are the parent process, we write the message to the array buffer fd. If we are the child process, we read from the READ\_END of the buffer fd, and print out that the child read the message from the buffer. The program output is the following:
+{\color{blue}
+\newline child read Greetings
+}
+
+\section{thrd-posix.c}
+The purpose of the program: to work with the Pthread library in C to create a pthread that will execute some work. The work in this program will sum all of the integers from 1 to the supplied argument. The program initiates, creates, and joins the pthread created, and then prints the sum. In the pthread\_create method, we assign the "work" to be done to the pthread, which is the runner method, and forwards the argument supplied to the program in pthread\_create. The program output is the following (with integer parameter 2000):
+{\color{blue}
+\newline sum = 2001000
+}
+
+\end{document}  
