@@ -15,7 +15,7 @@
 \maketitle
 
 \section*{Question 3.9} {\color{blue}Describe the actions taken by a kernel to context-switch between processes.}
-The OS must save the current process's state (the one that is running) and restore the next-to-be-run process's state. What needs to be saved are all of the registers, the processor id, etc. There are also possible architecture-specific operations that need to be done as well.
+Firstly, the OS saves the program counter of the process that is currently running. The OS then transfers control to the interrupt handler in the kernel. Inside the kernel, the interrupt handler saves the state of the registers (including any other registers, etc.) in the process control block (PCB). The scheduler in the kernel determines which process to execute next. Then the state from that next-to-be-executed process is retrieved from its PCB, and restores all of its registers, etc. Then, the OS returns control back, and therefore continues executing in user level.
 
 \section*{Question 3.17} {\color{blue}Using the program shown in Figure 3.35, explain what the output will be at lines X and Y.} For LINE X, the output will be: ``CHILD: 0 CHILD: -1 CHILD: -4 CHILD: -9 CHILD: -16 ". For LINE Y, the output will be: ``PARENT: 0 PARENT: 1 PARENT: 2 PARENT: 3 PARENT: 4".
 
@@ -23,9 +23,9 @@ The OS must save the current process's state (the one that is running) and resto
 \begin{enumerate}
 \item[(a)]Synchronous and asynchronous communication: {\color{black}
 \begin{itemize}
-\item Benefit (synchronous): it allows a rendezvous (when send() and receive() are both blocking) between the sender and receiver. 
-\item Disadvantage (synchronous): a rendezvous may not be required given the context of the system, and the message could have be delievered asynchronously. Therefore, send() and receive() do not have to both block if necessary in some situations.
-\item Benefit (asynchronous): some scenarios may require asynchronous communication, particularly when there are many users sending messages on the same machine. Also, asynchronous communication can send multiple large messages faster than synchronous (because synchronous blocks until the message send is complete).
+\item Benefit (synchronous): it is possible to have a rendezvous (when send() and receive() are both blocking) between the sender and receiver, which is useful in certain contexts.
+\item Disadvantage (synchronous): a rendezvous may not be required given the context of the system, and the message could have been delievered asynchronously. Therefore, send() and receive() do not have to both block if necessary in some situations.
+\item Benefit (asynchronous): some scenarios may require asynchronous communication, particularly when there are many users sending messages on the same machine. Also, asynchronous communication can send multiple large messages faster than synchronous (because synchronous blocks until the message send is complete before it can send the next one).
 \item Disadvantage (asynchronous): there is overhead in sending a message asynchronously (in starting a different thread to send the message on, etc.).
 \end{itemize}
 }
@@ -41,9 +41,9 @@ The OS must save the current process's state (the one that is running) and resto
 
 \item[(c)]Send by copy and send by reference: {\color{black}
 \begin{itemize}
-\item Benefit (by reference): there is no extra memory allocation needed to copy the object (unlike by-copy).
-\item Disadvantage (by reference): it does not allow the receiver to change the input parameter's state.
-\item Benefit (by copy): it allows the receiver to change the parameter's state (unlike by-reference's disadvantage above).
+\item Benefit (by reference): there is no extra memory allocation needed (unlike by-copy).
+\item Disadvantage (by reference): it is not possible for the receiver to change the state of the input parameter.
+\item Benefit (by copy): it is possible for the receiver to change the state of the input parameter (unlike by-reference's disadvantage above).
 \item Disadvantage (by copy): it requires extra memory allocation and CPU time to copy the contents of the input parameter.
 \end{itemize}
 }
