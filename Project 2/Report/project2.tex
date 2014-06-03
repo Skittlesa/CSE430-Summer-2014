@@ -1,0 +1,35 @@
+\documentclass[12pt]{article}
+\usepackage{geometry}                % See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   % ... or a4paper or a5paper or ... 
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{amssymb}
+\usepackage{epstopdf}
+\usepackage{verbatim}
+\DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
+
+\title{CSE 430 Summer 2014 - Project 2}
+\author{Ryan Dougherty}
+\date{}                                           % Activate to display a given date or no date
+
+\begin{document}
+\maketitle
+
+\abstract{This document will cover Project 2, which is about solutions to the Reader-Writer problem. We will observe the output produced by the code given, then modify the critical section in Database.java to implement the starvation-free pseudo-code algorithm (but is unfair), and finally modify RWQueue so that our implementation is fair.}
+
+\section{Part 1 Output}
+The Part 1 output is the following:
+{\color{blue}
+\verbatiminput{part1.txt}
+}
+As we can see, there are some sections that allow reader and writer 0 to take much more time than 1 or 2. Therefore, this algorithm is not starvation-free. 
+
+\section{Part 2 Output}
+
+\section{Part 3 Output}
+The purpose of these programs: to create a server-client relationship in Java to provide a service to a client. The functionality is to give the current date and time. The program output is the following:
+{\color{blue}
+\newline Thu May 29 10:11:16 MST 2014
+}
+
+\end{document}  

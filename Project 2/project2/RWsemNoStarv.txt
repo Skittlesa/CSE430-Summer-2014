@@ -1,0 +1,53 @@
+/***
+ * The following pseudo-code algorithm removes the Writer starvation
+ * problem associated with the Java code in the text. Neither the
+ * Readers nor Writers starve but it isn't very fair. Arrivals of
+ * Readers well after a Waiting Writer arrived may get to run sooner.
+ */
+
+
+Reader Entry
+   P(mutex);
+   if (wwc>0) or (wc>0) then
+   begin 
+       rwc++;
+       V(mutex);
+       P(rsem);
+       rwc--; 
+   end;
+   rc++;
+   if rwc>0 then
+       V(rsem);
+   else
+       V(mutex);
+
+Reader Exit
+   P(mutex);
+   rc--;
+   if (rc=0) and (wwc>0) then
+       V(wsem);
+   else
+       V(mutex);
+
+Writer Entry
+   P(mutex);
+   if (rc>0)or(wc>0) then
+   begin
+       wwc++;
+       V(mutex);
+       P(wsem);
+       wwc--; 
+   end;
+   wc++;
+   V(mutex);
+
+Writer Exit
+   P(mutex);
+   wc-- ;   
+   if (rwc>0) then
+       V(rsem)
+   else
+       if (wwc>0) then
+          V(wsem);
+       else
+          V(mutex) 
