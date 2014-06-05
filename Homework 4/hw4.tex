@@ -1,0 +1,124 @@
+\documentclass[12pt]{article}
+\usepackage{geometry}                % See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   % ... or a4paper or a5paper or ... 
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{amssymb}
+\usepackage{epstopdf}
+\DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
+
+\title{CSE 430 Homework 4}
+\author{Ryan Dougherty}
+\date{}                                           % Activate to display a given date or no date
+
+\begin{document}
+\maketitle
+
+\section*{Question 6.16} {\color{blue}Consider the following set of processes, with the length of the CPU burst...The processes are assumed to have arrieved in the order $P_{1}, P_{2}, P_{3}, P_{4}, P_{5}$, all at time 0.
+\begin{enumerate}
+\item[(a)]Draw 4 Gantt charts that illustrate the execution of these processes using the following scheduling algorithms: FCFS, SJF, nonpreemptive priority (a larger priority number implies a higher priority), and RR (quantum = 2).
+\\
+{\color{black}
+FCFS: \\
+\framebox{$P_{1}$}\framebox{$P_{2}$}\framebox{$P_{3}$}\framebox{$P_{4}$}\framebox{$P_{5}$}
+\begin{verbatim}
+0  2  3 11 15 20
+\end{verbatim}
+
+SJF: \\
+\framebox{$P_{2}$}\framebox{$P_{1}$}\framebox{$P_{4}$}\framebox{$P_{5}$}\framebox{$P_{3}$}
+\begin{verbatim}
+0  1  3  7 12 20
+\end{verbatim}
+
+Nonpreemptive: \\
+\framebox{$P_{3}$}\framebox{$P_{5}$}\framebox{$P_{1}$}\framebox{$P_{4}$}\framebox{$P_{2}$}
+\begin{verbatim}
+0  8 13 15 19 20
+\end{verbatim}
+
+RR: \\
+\framebox{$P_{1}$}\framebox{$P_{2}$}\framebox{$P_{3}$}\framebox{$P_{4}$}\framebox{$P_{5}$}\framebox{$P_{3}$}\framebox{$P_{4}$}\framebox{$P_{5}$}\framebox{$P_{3}$}\framebox{$P_{5}$}\framebox{$P_{3}$}
+\begin{verbatim}
+0  2  3  5  7  9  11 13 15 17 18 20
+\end{verbatim}
+
+}
+
+\newpage
+\item[(b)]What is the turnaround time of each process for each of the scheduling algorithms in part a?
+\\
+{\color{black}
+\begin{table}[h]
+\begin{tabular}{lllll}
+Process & FCFS & SJF & Nonpreemptive & RR \\
+P1      & 2    & 3  & 15       & 2 \\
+P2      & 3    & 1   & 20       & 3  \\
+P3      & 11   & 20  & 8        & 20 \\
+P4      & 15   & 7   & 19       & 13  \\
+P5      & 20   & 12   & 13       & 18 \\
+Average & 10.2  & 8.6   & 15      &   10.3 
+\end{tabular}
+\end{table}
+}
+
+\item[(c)]What is the waiting time of each process for each of these scheduling algorithms?
+\\
+{\color{black}
+\begin{table}[h1]
+\begin{tabular}{lllll}
+Process & FCFS & SJF & Nonpreemptive & RR   \\
+P1      & 0    & 1   & 13        & 0    \\
+P2      & 2    & 0   & 19        & 2    \\
+P3      & 3    & 12  & 0        & 12   \\
+P4      & 11   & 3   & 15       & 9    \\
+P5      & 15   & 7   & 8       & 13    \\
+Average & 6.2  & 4.6   & 11      & 7.2
+\end{tabular}
+\end{table}
+}
+
+\item[(d)]Which of the algorithms results in the minimum average waiting time (over all processes)? {\color{black}As seen in the tables above, the minimum average waiting time is the shortest-job-first (SJF) algorithm. }
+\end{enumerate}
+}
+
+\section*{Question 6.19} {\color{blue}Which of the following scheduling algorithms could result in starvation?
+\begin{enumerate}
+\item[(a)]First-come, first-served {\color{black} No, it is not possible.}
+\item[(b)]Shortest job first {\color{black} Yes, it is possible.}
+\item[(c)]Round robin {\color{black} No, it is not possible.}
+\item[(d)]Priority {\color{black} Yes, it is possible.}
+\end{enumerate}
+}
+
+\section*{Question 6.20} {\color{blue}Consider a variant of the RR scheduling algorithm in which the entries in the ready queue are pointers to the PCBs.
+\begin{enumerate}
+\item[(a)]What would be the effect of putting two pointers to the same process in the ready queue? {\color{black} The process would run twice as many times.}
+\item[(b)]What would be two major advantages and two disadvantages of this scheme?
+{\color{black}
+\begin{itemize}
+\item Advantages
+\begin{enumerate}
+\item[(i)]The user can prioritize more important processes.
+\item[(ii)]Starvation is prevented for processes of less priority.
+\item[(iii)]The scheduling algorithm does not have to be changed.
+\end{enumerate}
+\item Disadvantages
+\begin{enumerate}
+\item[(i)]Context switching has a larger effect.
+\item[(ii)]Removing processes from running queue is harder (need to search through whole list).
+\end{enumerate}
+\end{itemize}
+}
+\item[(c)]How would you modify the basic RR algorithm to achieve the same effect without the duplicate pointers? {\color{black} Achieving the same effect without duplicate pointers can happen if we allow the quantum time of each process to be changed on a per-process basis.}
+\end{enumerate}
+}
+
+\section*{Question 6.24} {\color{blue}Explain the differences in how much the following scheduling algorithms discriminate in favor of short processes:
+\begin{enumerate}
+\item[(a)]FCFS {\color{black} If long processes come before short processes, then the short processes will have to wait longer before they can run.}
+\item[(b)]RR {\color{black} Since each process has equal priority, the shorter processes will finish first. }
+\item[(c)]Multilevel feedback queues {\color{black} If a process take too much CPU time, it is moved to a lower-priority queue. Therefore, shorter processes are favored.}
+\end{enumerate}
+}
+\end{document}  
