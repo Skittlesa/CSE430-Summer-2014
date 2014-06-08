@@ -29,29 +29,32 @@
 \section*{Question 5.3} {\color{blue}What is the meaning of the term \textbf{\emph{busy waiting}}? What other kinds of waiting are there in an operating system? Can busy waiting be avoided altogether? Explain your answer.} 
 When a process waits for a condition to be satisﬁed in a loop without giving up the processor, that is called busy waiting.
 \\ \\
-Another kind of waiting in an OS is: a process could wait by giving up the processor, and block on a condition and wait to be awakened at some future time. 
+Another kind of waiting in an OS is for a processor to block on some condition, and will awake at some future time (probably by some external (to the processor) signal).
 \\ \\
-Busy waiting can be avoided altogether, but incurs the overhead associated with putting a process to sleep and having to wake it up when the appropriate program state is reached.
+Busy waiting can be avoided altogether. However, there is an overhead in making a process sleep and/or wake.
 
 \section*{Question 5.5} {\color{blue}Show that, if the wait() and signal() semaphore operations are not executed atomically, then mutual exclusion may be violated.} 
 Assume wait() and signal() are not executed atomically. The function of wait() is to decrement a semaphore's value atomically (in theory). Consider the case when 2 wait operations execute on the same semaphore with a positive value. Since we assumed wait() is not executed atomically, the 2 operations may decrement the same value before an update of the value, which violates mutual exclusion. The answer for signal() has a similar construction.
 
-\section*{Question 5.9} {\color{blue}The first known correct software solution to the critical-section problem for n processes with a lower bound on waiting n-1 turns was presented by Eisenberg and McGuire...Prove that the algorithm satisfies all three requirements for the critical-section problem.} We need to show that the following are true: (1) mutual exclusion is preserved, (2) the progress requirement is satisfied, and (3) the bounded-waiting requirement is met. Assume that $P_{i}$ means processor i. Let CS mean ``critical section".
+\section*{Question 5.9} {\color{blue}The first known correct software solution to the critical-section problem for n processes with a lower bound on waiting n-1 turns was presented by Eisenberg and McGuire...Prove that the algorithm satisfies all three requirements for the critical-section problem.}
+We need to show that the following are true: (1) mutual exclusion is preserved, (2) the progress requirement is satisfied, and (3) the bounded-waiting requirement is met. Assume that $P_{i}$ means processor i. Let CS mean ``critical section".
 \\ \\
-To prove (1), see that $P_{i}$ enters its CS iff flag[j] is not equal to in\_cs for all j different than i. Since only $P_{i}$ can set flag[i] to be equal to in\_cs, and since $P_{i}$ inspects flag[j] only while flag[i] is equal to in\_cs, we can see that mutual exclusion is preserved.
+To prove (1), see that $P_{i}$ enters its CS $\iff$ flag[j] is not equal to in\_cs for all j different than i. Since only $P_{i}$ can set flag[i] to be equal to in\_cs, and since $P_{i}$ inspects flag[j] only while flag[i] is equal to in\_cs, we can see that mutual exclusion is preserved.
 \\ \\
-To prove (2), see that only when a process enters its CS and when it leaves its CS does the value of turn can be modified. Therefore, if no process executes or leaves its CS, the value of turn remains unchanged. The first contending process in the cyclic ordering (turn, turn+1, ..., n-1, 0, ..., turn-1) will enter the CS. Therefore, the progress requirement is satisfied.
+To prove (2), see that only when a process enters its CS (and when it leaves its CS) does the value of turn change. Therefore, if no process executes or leaves its CS, the value of turn remains unchanged. The first process (that is contending to enter the CS) in the ordering of turn, turn+1, ..., n-1, 0, ..., turn-1 will enter the CS. Therefore, the progress requirement is satisfied.
 \\ \\
-To prove (3), see that when a process leaves the CS, it must designate as its unique successor the first contending process in the cyclic ordering (turn+1, ..., n-1, 0, ..., turn-1, turn), ensuring that any process wanting to enter its CS will do so within n-1 turns. Therefore, the bounded-waiting requirement is met.
+To prove (3), see that when a process leaves the CS, it must designate as its unique successor the first contending process in that same ordering as described in (2). This ordering ensures that any process wanting to enter its CS will do so within n-1 turns. Therefore, the bounded-waiting requirement is met.
 \\ \\
 All three conditions are met, so our proof is done.
 
 \section*{Question 5.11} {\color{blue}Explain why interrupts are not appropriate for implementing synchronization primitives in multiprocessor systems.} 
-Interrupts are not appropriate for implementing synchronization primitives in multiprocessor systems because disabling interrupts only prevents other processes from executing on the processor in which interrupts were disabled. There are no limitations on what processes could be executing on other processors. Therefore, the process that disables interrupts cannot guarantee mutually exclusive access to program state.
+Interrupts are not appropriate for implementing synchronization primitives in multiprocessor systems because disabling interrupts only prevents other processes from executing on the disabled-interrupts processor. Processes can execute anything on others. Therefore, the disable-interrupts process cannot guarantee mutual exclusion (for program state, etc.).
 
 \section*{Question 5.14} {\color{blue}Describe how the compare\_and\_swap() instruction can be used to provide mutual exclusion that satisfies the bounded-waiting requirement.}
 \\
 \begin{lstlisting}
+// This code is an example of using 
+// compare_and_swap() to satisfy bounded-waiting.
 int lock; // initially set to 0
 int waiting[n]; // all initially set to 0
 // ...
@@ -82,8 +85,8 @@ For progress, we have the same argument as for mutual exclusion. A process exiti
 For bounded-waiting, when a process leaves its CS, the waiting array does a cyclic ordering from i+1, i+2, ..., n-1, 0, ..., i-1. It says that the first process in the ordering that is in the entry section (waiting[j] == 1) as the next to enter the CS. Therefore, any processing wanting to enter the CS will have to wait n-1 turns, and the bounded-waiting requirement is met. 
 
 \section*{Question 5.28} {\color{blue}Discuss the tradeoff between fairness and throughput of operations in the readers-writers problem. Propose a method for solving the readers-writers problem without causing starvation.} 
-Throughput in the readers-writers problem is increased by favoring multiple readers as opposed to allowing a single writer to exclusively access the shared values. However, favoring readers could result in starvation for writers. 
+Fairness and throughput of operatins in the readers-writers problem are inversely related. Throughput can increase by favoring multiple readers (who do not modify program state) instead of favoring a single writer (for accessing and modifying shared data/values). However, doing this could result in writer starvation (i.e. can never modify data/values). 
 \\ \\
-The starvation in the readers-writers problem could be avoided by keeping timestamps associated with waiting processes. When a writer is finished with its task, it would wake up the process that has been waiting for the longest duration. When a reader arrives and notices that another reader is accessing the database, then it would enter the CS only if there are no waiting writers. These restrictions would guarantee fairness.
+Keeping timestamps on processes that are waiting is one way to avoid starvation in the readers-writers problem. When a writer finishes writing, it wakes up the longest-waiting process. When a reader arrives and notices that other reader(s) are accessing the shared data/values, then it would enter its CS only if there are no waiting writers. Therefore, fairness is guaranteed.
 
 \end{document}  

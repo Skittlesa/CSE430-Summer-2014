@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=pdflatex 2012.6.30)  4 JUN 2014 19:43
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=pdflatex 2012.6.30)  8 JUN 2014 13:57
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -332,49 +332,49 @@ Underfull \hbox (badness 10000) in paragraph at lines 29--35
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 39--48
+Underfull \hbox (badness 10000) in paragraph at lines 39--49
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 39--48
+Underfull \hbox (badness 10000) in paragraph at lines 39--49
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 39--48
+Underfull \hbox (badness 10000) in paragraph at lines 39--49
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 39--48
+Underfull \hbox (badness 10000) in paragraph at lines 39--49
 
  []
 
 [1
 
 {/usr/local/texlive/2012/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-Underfull \hbox (badness 10000) in paragraph at lines 52--54
+Underfull \hbox (badness 10000) in paragraph at lines 53--55
 
  []
 
 [2]
-Underfull \hbox (badness 10000) in paragraph at lines 76--83
+Underfull \hbox (badness 10000) in paragraph at lines 79--86
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 76--83
+Underfull \hbox (badness 10000) in paragraph at lines 79--86
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 76--83
+Underfull \hbox (badness 10000) in paragraph at lines 79--86
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 84--88
+Underfull \hbox (badness 10000) in paragraph at lines 87--91
 
  []
 
@@ -394,11 +394,12 @@ s/cm/cmmi12.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts
 /cm/cmmi8.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/c
 m/cmr12.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/
 cmr17.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cm
-tt12.pfb>
-Output written on hw3.pdf (3 pages, 78419 bytes).
+sy10.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmt
+t12.pfb>
+Output written on hw3.pdf (3 pages, 86980 bytes).
 PDF statistics:
- 42 PDF objects out of 1000 (max. 8388607)
- 29 compressed objects within 1 object stream
+ 46 PDF objects out of 1000 (max. 8388607)
+ 32 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

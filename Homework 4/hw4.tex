@@ -31,7 +31,7 @@ SJF: \\
 0  1  3  7 12 20
 \end{verbatim}
 
-Nonpreemptive: \\
+Nonpreemptive Priority: \\
 \framebox{$P_{3}$}\framebox{$P_{5}$}\framebox{$P_{1}$}\framebox{$P_{4}$}\framebox{$P_{2}$}
 \begin{verbatim}
 0  8 13 15 19 20
@@ -51,12 +51,12 @@ RR: \\
 {\color{black}
 \begin{table}[h]
 \begin{tabular}{lllll}
-Process & FCFS & SJF & Nonpreemptive & RR \\
-P1      & 2    & 3  & 15       & 2 \\
-P2      & 3    & 1   & 20       & 3  \\
-P3      & 11   & 20  & 8        & 20 \\
-P4      & 15   & 7   & 19       & 13  \\
-P5      & 20   & 12   & 13       & 18 \\
+Process & FCFS & SJF & Nonpreemptive Priority & RR \\
+$P_{1}$      & 2    & 3  & 15       & 2 \\
+$P_{2}$      & 3    & 1   & 20       & 3  \\
+$P_{3}$      & 11   & 20  & 8        & 20 \\
+$P_{4}$      & 15   & 7   & 19       & 13  \\
+$P_{5}$      & 20   & 12   & 13       & 18 \\
 Average & 10.2  & 8.6   & 15      &   10.3 
 \end{tabular}
 \end{table}
@@ -67,12 +67,12 @@ Average & 10.2  & 8.6   & 15      &   10.3
 {\color{black}
 \begin{table}[h1]
 \begin{tabular}{lllll}
-Process & FCFS & SJF & Nonpreemptive & RR   \\
-P1      & 0    & 1   & 13        & 0    \\
-P2      & 2    & 0   & 19        & 2    \\
-P3      & 3    & 12  & 0        & 12   \\
-P4      & 11   & 3   & 15       & 9    \\
-P5      & 15   & 7   & 8       & 13    \\
+Process & FCFS & SJF & Nonpreemptive Priority & RR   \\
+$P_{1}$      & 0    & 1   & 13        & 0    \\
+$P_{2}$      & 2    & 0   & 19        & 2    \\
+$P_{3}$      & 3    & 12  & 0        & 12   \\
+$P_{4}$      & 11   & 3   & 15       & 9    \\
+$P_{5}$      & 15   & 7   & 8       & 13    \\
 Average & 6.2  & 4.6   & 11      & 7.2
 \end{tabular}
 \end{table}
@@ -93,7 +93,7 @@ Average & 6.2  & 4.6   & 11      & 7.2
 
 \section*{Question 6.20} {\color{blue}Consider a variant of the RR scheduling algorithm in which the entries in the ready queue are pointers to the PCBs.
 \begin{enumerate}
-\item[(a)]What would be the effect of putting two pointers to the same process in the ready queue? {\color{black} The process would run twice as many times.}
+\item[(a)]What would be the effect of putting two pointers to the same process in the ready queue? {\color{black} That process will have a higher priority (i.e. run twice as often). }
 \item[(b)]What would be two major advantages and two disadvantages of this scheme?
 {\color{black}
 \begin{itemize}
@@ -116,9 +116,9 @@ Average & 6.2  & 4.6   & 11      & 7.2
 
 \section*{Question 6.24} {\color{blue}Explain the differences in how much the following scheduling algorithms discriminate in favor of short processes:
 \begin{enumerate}
-\item[(a)]FCFS {\color{black} If long processes come before short processes, then the short processes will have to wait longer before they can run.}
-\item[(b)]RR {\color{black} Since each process has equal priority, the shorter processes will finish first. }
-\item[(c)]Multilevel feedback queues {\color{black} If a process take too much CPU time, it is moved to a lower-priority queue. Therefore, shorter processes are favored.}
+\item[(a)]FCFS {\color{black} If long processes come before short processes, then the short processes will have to wait longer before they can run. Therefore, FCFS discriminates against shorter processes.}
+\item[(b)]RR {\color{black} Since each process has equal priority, the shorter processes will finish first. Therefore, RR discriminates for shorter processes. }
+\item[(c)]Multilevel feedback queues {\color{black} If a process take too much CPU time, it is moved to a lower-priority queue. Therefore, multilevel feedback queues discriminate for shorter processes.}
 \end{enumerate}
 }
 \end{document}  
