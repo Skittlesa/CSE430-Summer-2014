@@ -99,14 +99,13 @@ Average & 6.2  & 4.6   & 11      & 7.2
 \begin{itemize}
 \item Advantages
 \begin{enumerate}
-\item[(i)]The user can prioritize more important processes.
-\item[(ii)]Starvation is prevented for processes of less priority.
-\item[(iii)]The scheduling algorithm does not have to be changed.
+\item[(i)]The user does not have to change the scheduling algorithm.
+\item[(ii)]For processes of lower priority, the algoritm prevents starvation.
 \end{enumerate}
 \item Disadvantages
 \begin{enumerate}
-\item[(i)]Context switching has a larger effect.
-\item[(ii)]Removing processes from running queue is harder (need to search through whole list).
+\item[(i)]The user must search through the entire list of processes in order to remove a process.
+\item[(ii)]There is more time taken in context switches.
 \end{enumerate}
 \end{itemize}
 }
@@ -118,7 +117,7 @@ Average & 6.2  & 4.6   & 11      & 7.2
 \begin{enumerate}
 \item[(a)]FCFS {\color{black} If long processes come before short processes, then the short processes will have to wait longer before they can run. Therefore, FCFS discriminates against shorter processes.}
 \item[(b)]RR {\color{black} Since each process has equal priority, the shorter processes will finish first. Therefore, RR discriminates for shorter processes. }
-\item[(c)]Multilevel feedback queues {\color{black} If a process take too much CPU time, it is moved to a lower-priority queue. Therefore, multilevel feedback queues discriminate for shorter processes.}
+\item[(c)]Multilevel feedback queues {\color{black} If a process take too much CPU time, it is moved to a lower-priority queue (i.e. longer processes). Therefore, multilevel feedback queues discriminate for shorter processes.}
 \end{enumerate}
 }
 \end{document}  

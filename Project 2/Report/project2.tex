@@ -2,34 +2,234 @@
 \usepackage{geometry}                % See geometry.pdf to learn the layout options. There are lots.
 \geometry{letterpaper}                   % ... or a4paper or a5paper or ... 
 \usepackage{graphicx}
-\usepackage{color}
+\usepackage[usenames,dvipsnames]{color}
 \usepackage{amssymb}
 \usepackage{epstopdf}
 \usepackage{verbatim}
+\usepackage{listings}
+\lstset{language=Java,
+	basicstyle=\ttfamily,
+	keywordstyle=\color{blue}\ttfamily,
+	stringstyle=\color{red}\ttfamily,
+	showstringspaces=false,
+	commentstyle=\color{ForestGreen}\ttfamily,
+	morecomment=[l][\color{magenta}]{\#}}
 \DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
 
 \title{CSE 430 Summer 2014 - Project 2}
-\author{Ryan Dougherty}
+\author{Ryan Dougherty - ASU ID: 1203621947}
 \date{}                                           % Activate to display a given date or no date
 
 \begin{document}
 \maketitle
 
-\abstract{This document will cover Project 2, which is about solutions to the Reader-Writer problem. We will observe the output produced by the code given, then modify the critical section in Database.java to implement the starvation-free pseudo-code algorithm (but is unfair), and finally modify RWQueue so that our implementation is fair.}
+\abstract{This document will cover Project 2, which is about the Readers-Writers problem. We will observe the output produced by the code given, then modify the critical section in Database.java to implement the starvation-free pseudo-code algorithm (but is unfair), and finally modify Database.java further (using RWQueue.java) so that our implementation promotes fairness among the readers and writers.}
+
+Note: All modified code (for Parts 2 and 3) is provided at the end of the document. 
 
 \section{Part 1 Output}
-The Part 1 output is the following:
+The Part 1 output is the following (one sample):
 {\color{blue}
 \verbatiminput{part1.txt}
 }
-As we can see, there are some sections that allow reader and writer 0 to take much more time than 1 or 2. Therefore, this algorithm is not starvation-free. 
+As we can see, reader 0 reads while writer 1 is still writing (writer 1 finishes writing after reader 0 reads). Therefore, we do not have guaranteed mutual exclusion.
 
 \section{Part 2 Output}
+The Part 2 output is the following (one sample):
+{\color{blue}
+\verbatiminput{part2.txt}
+}
+As we can see, at no point does a writer start writing then have a reader read before the writer finishes. Therefore, we have guaranteed mutual exclusion. Also, neither readers nor writers starve (multiple readers can read simultaneously). Therefore, we have guaranteed no starvation of readers or writers. However, we can see that there are certain readers (such as 1) that get more time reading than other readers, making our implementation of the Readers-Writers problem unfair. This behavior can be further seen if we increase the number of readers (there were 3 readers and 2 writers in this example). Part 3 output solves this problem by allowing fairness.
 
 \section{Part 3 Output}
-The purpose of these programs: to create a server-client relationship in Java to provide a service to a client. The functionality is to give the current date and time. The program output is the following:
+The Part 3 output is the following (one sample):
 {\color{blue}
-\newline Thu May 29 10:11:16 MST 2014
+\verbatiminput{part3.txt}
 }
+As we can see, we still have mutual exclusion and no starvation guarantees as was in Part 2. But now, we can see that no reader reads nor writer writes any more than another. Therefore, we have guaranteed fairness. 
+
+\section{Part 2 Modified Code}
+All of the Part 2 modified code can be found in ``part2modifiedcode.txt".
+\begin{lstlisting}
+/**
+ ...
+ */
+public class Database { 
+ 	public Database() {      
+      		mutex = new Semaphore(1);
+      		db = new Semaphore(1);
+      		rsem = new Semaphore(0);
+      		wsem = new Semaphore(0);
+      		wwc = 0;
+      		wc = 0;
+      		rwc = 0;
+      		rc = 0;
+   	}
+
+   	// readers and writers will call this to nap
+   	public static void napping() {
+    		// unchanged
+   	}
+
+   	public int startRead() { 
+   		mutex.P();
+      
+      		if (wwc > 0 || wc > 0) {
+    	  		rwc++;
+    	  		mutex.V();
+    	  		rsem.P();
+    	  		rwc--;
+      		}
+      		rc++;
+      		if (rwc > 0) {
+    	  		rsem.V();
+      		} else {
+    	  		mutex.V();
+      		}
+      		return rc;
+   	}
+
+   	public int endRead() {
+      		mutex.P();
+      		rc--;
+      		if (rc == 0 && wwc > 0) {
+    	  		wsem.V();
+      		} else {
+    	  		mutex.V();
+      		}
+      		return rc;
+   	}
+
+	public void startWrite() {
+		mutex.P();
+	   	if (rc > 0 || wc > 0) {
+		   	wwc++;
+		   	mutex.V();
+		   	wsem.P();
+		   	wwc--;
+	   	}
+	   	wc++;
+	   	mutex.V();
+   	}
+
+   	public void endWrite() {
+      		mutex.P();
+      		wc--;
+      		if (rwc > 0) {
+    	  		rsem.V();
+      		} else {
+    	  		if (wwc > 0) {
+    		 		wsem.V();
+    	  		} else {
+    		  		mutex.V();
+    	  		}
+      		}
+   	}
+
+   	Semaphore mutex;  // controls access to readerCount
+   	Semaphore db;     // controls access to the database
+   	Semaphore rsem, wsem;
+   	private int wwc; // writer waiting counter
+   	private int  wc; // writer counter
+   	private int  rwc; // reader waiting counter
+   	private int  rc; // reader counter
+   	private static final int NAP_TIME = 15;
+}
+\end{lstlisting}
+
+\section{Part 3 Modified Code}
+All of the Part 3 modified code can be found in ``part3modifiedcode.txt".
+\begin{lstlisting}
+/**
+ ...
+ */
+public class Database {
+   	public Database() {      
+      		mutex = new Semaphore(1);
+      		db = new Semaphore(1);
+      		rsem = new Semaphore(0);
+      		wsem = new Semaphore(0);
+      		queue = new RWQueue();
+      		wwc = 0;
+      		wc = 0;
+      		rwc = 0;
+      		rc = 0;
+   	}
+
+   	// readers and writers will call this to nap
+   	public static void napping() {
+     		// unchanged
+   	}
+
+   	public int startRead() { 
+      		mutex.P();
+      		if (wwc > 0 || wc > 0) {
+    	  		rwc++;
+    	  		mutex.V();
+    	  		queue.enqueue();
+    	  		rwc--;
+      		}
+      		rc++;
+      		if (queue.dequeueReader() == false) {
+    	  		mutex.V();
+      		}
+      		return rc;
+   	}
+
+   	public int endRead() {
+      		mutex.P();
+      		rc--;
+      		if (rc > 0) {
+    	  		mutex.V();
+      		} else {
+    	  		Release();
+      		}
+      		return rc;
+   	}
+
+   	public void startWrite() {
+	   	mutex.P();
+	   	if (rc > 0 || wc > 0) {
+		   	wwc++;
+		   	mutex.V();
+		   	queue.enqueue();
+		   	wwc--;
+	   	}
+	   	wc++;
+	   	mutex.V();
+   	}
+
+   	public void endWrite() {
+      		mutex.P();
+      		wc--;
+      		Release();
+   	}
+
+   	private void Release() {
+	   	if (rwc > 0 || wwc > 0) {
+		   	while (true) {
+			   	if (queue.dequeueWriter() == false) {
+				if (queue.dequeueReader() == false) {
+					continue;
+				}
+			   	}
+			   	break;
+		   	}
+	   	} else {
+		   	mutex.V();
+	   	}
+   	}
+
+   	Semaphore mutex;  // controls access to readerCount
+   	Semaphore db;     // controls access to the database
+   	Semaphore rsem, wsem;
+   	RWQueue queue;
+   	private int wwc; // writer waiting counter
+   	private int wc; // writer counter
+   	private int rwc; // reader waiting counter
+   	private int rc; // reader counter
+   	private static final int NAP_TIME = 15;
+}
+\end{lstlisting}
 
 \end{document}  

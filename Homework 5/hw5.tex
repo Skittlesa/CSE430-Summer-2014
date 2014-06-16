@@ -1,0 +1,48 @@
+\documentclass[12pt]{article}
+\usepackage{geometry}                % See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   % ... or a4paper or a5paper or ... 
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{amssymb}
+\usepackage{epstopdf}
+\DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
+
+\title{CSE 430 Homework 5}
+\author{Ryan Dougherty}
+\date{}                                           % Activate to display a given date or no date
+
+\begin{document}
+\maketitle
+
+\section*{Question 7.4} {\color{blue}A possible method for preventing deadlocks is to have a single, higher- order resource that must be requested before any other resource...Compare this scheme with the circular-wait scheme of Section 7.4.4.}
+\\ 
+This solution is not ideal. The reason is that it can possibly yield a scope that is too large (preferred to have a smaller scope).
+
+\section*{Question 7.11} {\color{blue}Consider the traffic deadlock depicted in Figure 7.10.
+\begin{enumerate}
+\item[(a)]Show that the four necessary conditions for deadlock hold in this example. {\color{black}
+\begin{itemize}
+\item[(i)]Mutual exclusion: the cross-streets are only used by only one line of cars.
+\item[(ii)]Hold and wait: each line of cars is holding one cross-street (the resource), and is waiting for another to become available.
+\item[(iii)]No preemption: the cross-streets are not freed (i.e. resource not released) until there are no cars left in it.
+\item[(iv)]Circular wait: the west-moving line of cars is waiting for the south, which is waiting for east, which is waiting for north, which is waiting for west (i.e. there is a circle in waiting).
+\end{itemize}
+}
+\item[(b)]State a simple rule for avoiding deadlocks in this system. {\color{black} There are many ways of avoiding deadlock (a complex solution would include using today's stoplights). A simple solution is for each car, determine if it can exit the intersection if it enters one. If yes, then proceed. Otherwise, wait until you can.
+}
+\end{enumerate}
+}
+
+\section*{Question 7.23} {\color{blue}Consider the following snapshot of a system: ... Answer the following questions using the banker's algorithm:
+\begin{enumerate}
+\item[(a)]Illustrate that the system is in a safe state by demonstrating an order in which the processes may complete. {\color{black}The sequence $<P_{0}, P_{3}, P_{1}, P_{2}, P_{4}>$ works. $Need_{0} = (2, 2, 1, 1)$, so $Need_{0} \le Work = Available = (3, 3, 2, 1)$. Therefore, $Work = Work + Allocation_{0} = (5, 3, 2, 2)$. We next pick $P_{3}$, and following the same algorithm gives a result for $Work = (6, 6, 3, 4)$. Since $Need_{i}$ for $i = 1, 2, 4 \le (6, 6, 3, 4)$, we can pick any other sequence for the last three. We then finish the last three sequences, and move to Step 4 of the algorithm. Since $Finish_{i} == true$ for all i, the system is in a safe state. 
+}
+\item[(b)]If a request from process $P_{1}$ arrives for (1, 1, 0, 0), can the request be granted immediately? {\color{black}Since $Request_{1} \le Need_{1}$, we go to Step 2. Since $Request_{1} \le Available$, we go to Step 3. We then follow the algorithm, which now has $Available = (2, 2, 2, 1), Allocation_{1} = (4, 2, 2, 1), Need_{1} = (1, 0, 3, 1)$, and the rest unchanged. We now check if the system is safe. Going through the algorithm, we can see that the sequence given in part (a) shows that the system is in a safe state. Therefore, the resources are allocated to $P_{1}$.
+}
+\item[(c)]If a request from process $P_{4}$ arrives for (0, 0, 2, 0), can the request be granted immediately? {\color{black}Since $Request_{4} \le Need_{4}$, we go to Step 2. Since $Request_{4} \le Available$, we go to Step 3. We then follow the algorithm, which now has $Available = (3, 3, 0, 1), Allocation_{4} = (1, 4, 5, 2), Need_{4} = (2, 2, 1, 3)$, and the rest unchanged. We now check if the system is safe. Going through the algorithm, we can see that for all processes, resource C has a value of 1 or greater, but what is available for C is 0. Therefore, the system is unsafe, and $P_{4}$ must wait (and the banker's algorithm says that the old resource-allocation state is restored).
+}
+\end{enumerate}
+
+}
+
+\end{document}  
