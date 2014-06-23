@@ -1,0 +1,30 @@
+reader 1 is sleeping.
+writer 0 is sleeping.
+reader 2 is sleeping.
+reader 0 is sleeping.
+writer 1 is sleeping.
+writer 0 wants to write.
+writer 0 is writing.
+reader 2 wants to read.
+reader 1 wants to read.
+writer 1 wants to write.
+writer 0 is done writing.
+reader 2 is reading. Count = 1
+reader 1 is reading. Count = 2
+writer 0 is sleeping.
+reader 2 is done reading. Count = 1
+reader 2 is sleeping.
+writer 0 wants to write.
+reader 0 wants to read.
+reader 2 wants to read.
+reader 1 is done reading. Count = 0
+reader 1 is sleeping.
+writer 1 is writing.
+reader 1 wants to read.
+writer 1 is done writing.
+reader 0 is reading. Count = 1
+reader 2 is reading. Count = 2
+reader 1 is reading. Count = 3
+writer 1 is sleeping.
+reader 2 is done reading. Count = 2
+reader 2 is sleeping.

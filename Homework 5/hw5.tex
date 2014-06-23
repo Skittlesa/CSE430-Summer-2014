@@ -14,9 +14,9 @@
 \begin{document}
 \maketitle
 
-\section*{Question 7.4} {\color{blue}A possible method for preventing deadlocks is to have a single, higher- order resource that must be requested before any other resource...Compare this scheme with the circular-wait scheme of Section 7.4.4.}
-\\ 
-This solution is not ideal. The reason is that it can possibly yield a scope that is too large (preferred to have a smaller scope).
+\section*{Question 7.4} {\color{blue}A possible method for preventing deadlocks is to have a single, higher- order resource that must be requested before any other resource...Compare this scheme with the circular-wait scheme of Section 7.4.4.} Both this algorithm and the circular-wait scheme prevent the deadlock, so that requirement is satisfied. However, there is a difference between the two algorithms: the circular-wait algorithm is more efficient than this one because circular-wait allows the shared resources to be used by multiple processes (given no deadlock), whereas this algorithm only allows 1. 
+\\ \\
+Another difference is that an implementation of this algorithm would be easier than circular-wait because for circular-wait, a process may not be able to predict what is the number of resources that it will use.
 
 \section*{Question 7.11} {\color{blue}Consider the traffic deadlock depicted in Figure 7.10.
 \begin{enumerate}

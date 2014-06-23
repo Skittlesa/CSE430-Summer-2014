@@ -1,0 +1,113 @@
+/**
+ * Database.java
+ *
+ * This class contains the methods the readers and writers will use
+ * to coordinate access to the database. Access is coordinated using semaphores.
+ *
+ * @author Greg Gagne, Peter Galvin, Avi Silberschatz
+ * @version 1.0 - July 15, 1999
+ * Copyright 2000 by Greg Gagne, Peter Galvin, Avi Silberschatz
+ * Applied Operating Systems Concepts - John Wiley and Sons, Inc.
+ */
+
+public class Database
+{  
+   public Database() {      
+      mutex = new Semaphore(1);
+      db = new Semaphore(1);
+      
+      rsem = new Semaphore(0);
+      wsem = new Semaphore(0);
+      
+      queue = new RWQueue();
+      
+      wwc = 0;
+      wc = 0;
+      rwc = 0;
+      rc = 0;
+   }
+
+   // readers and writers will call this to nap
+   public static void napping() {
+     int sleepTime = (int) (NAP_TIME * Math.random() );
+     try { Thread.sleep(sleepTime*1000); }
+     catch(InterruptedException e) {}
+   }
+
+
+   public int startRead() { 
+      mutex.P();
+      
+      if (wwc > 0 || wc > 0) {
+    	  rwc++;
+    	  mutex.V();
+    	  queue.enqueue();
+    	  rwc--;
+      }
+      rc++;
+      if (queue.dequeueReader() == false) {
+    	  mutex.V();
+      }
+     
+      return rc;
+   }
+
+   public int endRead() {
+      mutex.P();
+      rc--;
+      if (rc > 0) {
+    	  mutex.V();
+      } else {
+    	  Release();
+      }
+
+      return rc;
+   }
+
+   public void startWrite() {
+	   mutex.P();
+	   if (rc > 0 || wc > 0) {
+		   wwc++;
+		   mutex.V();
+		   queue.enqueue();
+		   wwc--;
+	   }
+	   wc++;
+	   mutex.V();
+   }
+
+   public void endWrite() {
+      mutex.P();
+      wc--;
+      Release();
+   }
+
+   private void Release() {
+	   if (rwc > 0 || wwc > 0) {
+		   while (true) {
+			   if (queue.dequeueWriter() == false) {
+				   if (queue.dequeueReader() == false) {
+					   continue;
+				   }
+			   }
+			   break;
+		   }
+	   } else {
+		   mutex.V();
+	   }
+   }
+
+   Semaphore mutex;  // controls access to readerCount
+   Semaphore db;     // controls access to the database
+   
+   Semaphore rsem, wsem;
+   
+   RWQueue queue;
+   
+   private int wwc; // writer waiting counter
+   private int wc; // writer counter
+   private int rwc; // reader waiting counter
+   private int rc; // reader counter
+   
+   private static final int NAP_TIME = 15;
+}
