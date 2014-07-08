@@ -49,7 +49,7 @@
 \item For best-fit, the ratios of memory left are: $M_{1} = 300/300, M_{2} = 100/600, M_{3} = 350/350, M_{4} = 0/200, M_{5} = 17/750, M_{6} = 10/125$. The average is: 37.8\%.
 \item For worst-fit, the ratios of memory left are: $M_{1} = 300/300, M_{2} = 242/600, M_{3} = 150/350, M_{4} = 200/200, M_{5} = 135/750, M_{6} = 125/125$. The average is: 66.9\%.
 \end{itemize}
-\item Therefore, best-fit most efficiently uses memory, first-fit next, and last is worst-fit.
+\item Therefore, best-fit most efficiently uses memory, first-fit next, and last is worst-fit. We could also define our ranking to be whether the algorithm requires a wait for a process. In that case, we could say that best-fit and first-fit are the most efficient, and worst-fit is the less efficient ($P_{5}$ has to wait).
 \end{itemize}
 
 \section*{Question 8.13}{\color{blue}Compare the memory organization schemes of contiguous memory allocation, pure segmentation, and pure paging with respect to the following issues:
@@ -91,9 +91,9 @@ $75\%$*(TLB hit time + finding page table entry) + $25\%$*(TLB miss time + findi
 
 \section*{Question 9.17}{\color{blue}What is the copy-on-write feature, and under what circumstances is its use beneficial? What hardware support is required to implement this feature?} The copy-on-write feature allows processes to share pages rather than each having a separate copy. However, when one process tries to write to a shared page, a trap is generated and the OS makes a separate copy of the page for each process. 
 \\ \\
-This is commonly used in a fork() operation where the child is supposed to have a complete copy of the parent address space. Instead of creating a separate copy, the OS allows the parent and child to share the parent's pages. However, since each is supposed to have its own private copy of the pages, the pages are copied when one of them attempts a write. 
+It use is beneficial when doing a fork() system call. There, the child process should have be a copy of the parent (including address space, etc.). However, what needs to be copied can be quite large. To counteract this, the OS allows both the parent and child to share the pages of the parent. However, since both the child and parent should have their own private copies of those pages, they are copied when either the parent or child attempts a write.
 \\ \\
-The hardware support required to implement this feature is that on each memory access, the page table needs to be consulted to check whether the page is write-protected. If so, a trap occurs and the OS can resolve the issue.
+The hardware support required to implement this feature is that on each memory access, the OS needs to check the page table to see if the page has write protections. If so, a trap occurs and the OS can resolve the issue.
 
 \section*{Question 9.19}{\color{blue}Assume that we have a demand-paged memory. The page table is held in registers. It takes 8 milliseconds to service a page fault if an empty frame is available or if the replaced page is not modified and 20 milliseconds if the replaced page is modified. Memory-access time is 100 nanoseconds. Assume that the page to be replaced is modified 70 percent of the time. What is the maximum acceptable page-fault rate for an effective access time of no more than 200 nanoseconds?} Let p be the page fault rate (i.e. the probability that a memory access results in a page fault). Then 1-p is the probability that a memory access costs 100ns. 
 \\ \\
@@ -103,7 +103,7 @@ The probability that a page fault costs 20ms is 0.7*p and the probability that a
 \begin{enumerate}
 \item[(a)]Install a faster CPU. {\color{black}This will not likely have any effect (available memory/program is limited). 
 }
-\item[(b)]Install a bigger paging disk. {\color{black}This is also unlikely to have any effect.
+\item[(b)]Install a bigger paging disk. {\color{black}This is also  unlikely to have any effect.
 }
 \item[(c)]Increase the degree of multiprogramming. {\color{black}This decreases CPU utilization because less memory is available for each program $\Rightarrow$ page fault probability increases.
 }
@@ -121,6 +121,6 @@ The probability that a page fault costs 20ms is 0.7*p and the probability that a
 
 }
 
-\section*{Question 9.33}{\color{blue}Is it possible for a process to have two working sets, one representing data and another representing code? Explain.} Yes. Some processors have 2 TLBs for this scenario, i.e. the code being accessed by a process may retain the same working set for a long period of time. However, the data the code accesses may change, thus reflecting a change in the working set for data accesses.
+\section*{Question 9.33}{\color{blue}Is it possible for a process to have two working sets, one representing data and another representing code? Explain.} Yes. Some processors have 2 TLBs for this scenario, i.e. the code accessed by some process possibly can have the same working set for awhile. However, there may be a change with respect to the working set (regarding data accesses) because the accessed data may change.
 
 \end{document}  

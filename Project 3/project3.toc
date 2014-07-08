@@ -1,0 +1,8 @@
+\contentsline {section}{\numberline {1}Installing Ubuntu}{1}
+\contentsline {section}{\numberline {2}Kernel Development Directory}{3}
+\contentsline {section}{\numberline {3}Utilities for Packaging Kernel}{4}
+\contentsline {section}{\numberline {4}Decompressing Kernel Source Code}{5}
+\contentsline {section}{\numberline {5}Configuring the Kernel}{6}
+\contentsline {section}{\numberline {6}Current OS Revision / Updating Kernel}{8}
+\contentsline {section}{\numberline {7}Running applications}{10}
+\contentsline {section}{\numberline {8}Conclusions}{12}
